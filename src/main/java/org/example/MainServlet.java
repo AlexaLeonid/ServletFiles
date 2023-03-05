@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//@WebServlet(urlPatterns = {"/fgh"})
-@WebServlet("/")
+
+@WebServlet("/files")
 public class MainServlet extends HttpServlet {
 
     @Override
@@ -31,7 +31,6 @@ public class MainServlet extends HttpServlet {
 
             req.setAttribute("file", file);
             req.setAttribute("files", files);
-            req.setAttribute("name", "Ululu");
 
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
@@ -44,28 +43,6 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String rawPath = req.getParameter("path");
-
-        if(rawPath != null){
-            byte[] bytes = rawPath.getBytes(StandardCharsets.ISO_8859_1);
-            String path = new String(bytes, StandardCharsets.UTF_8);
-            String fileName = Paths.get(path).getFileName().toString();
-            resp.setContentType("application/x-msdownload"); //???
-            resp.setHeader("Content-Disposition", "attachment; filename="+ fileName); //???
-            try (InputStream in = new FileInputStream(path); OutputStream out = resp.getOutputStream()) {
-                byte[] buffer = new byte[1048];
-                int numBytesRead;
-                while ((numBytesRead = in.read(buffer)) > 0) {
-                    out.write(buffer, 0, numBytesRead);
-                }
-            } catch (FileNotFoundException e) {
-                resp.sendError(404);
-            }
-            resp.sendRedirect(req.getRequestURL().toString());
-        }else{
-            resp.sendError(404);
-        }
-
-
+        resp.getWriter().write("POST method isn't available");
     }
 }

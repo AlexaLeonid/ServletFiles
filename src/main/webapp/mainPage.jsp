@@ -35,7 +35,7 @@
             <tr>
                 <td>
                     <c:if test="${item.isFile()}">
-                        <form action="./" method="post">
+                        <form action="./files/download" method="post">
                         <button
                            type="submit"
                            name="path"
@@ -46,7 +46,7 @@
                             </form>
                     </c:if>
                     <c:if test="${item.isDirectory()}">
-                        <form action="./" method="get">
+                        <form action="./files" method="get">
                         <button
                             type="submit"
                             name="path"
@@ -63,6 +63,5 @@
         </c:forEach>
         </tbody>
     </table>
-    <h1>Hello Servlet, наконец-то ${name}!</h1>
 </body>
 </html>
