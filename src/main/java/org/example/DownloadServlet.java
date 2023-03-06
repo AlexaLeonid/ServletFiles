@@ -32,7 +32,7 @@ public class DownloadServlet extends HttpServlet{
             resp.setContentType("text/plain");
             resp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (InputStream in = new FileInputStream(path); OutputStream out = resp.getOutputStream()) {
-                byte[] buffer = new byte[1000000000];
+                byte[] buffer = new byte[4096];
                 int numBytesRead;
                 while ((numBytesRead = in.read(buffer)) > 0) {
                     out.write(buffer, 0, numBytesRead);
