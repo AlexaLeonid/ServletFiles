@@ -15,9 +15,9 @@
 <body>
     <h4>${dateGeneration}</h4>
     <br>
-    <form action="./" method="get" >
+    <form action="./files" method="get" >
     <button type="submit" name="path" value=${parentDirectory} >
-    <span class="cuttedText">Вверх</span>
+    <span class="Text">Вверх</span>
     </button>
     </form>
     <h1>${path}
@@ -41,7 +41,7 @@
                            name="path"
                            value="${item.getAbsolutePath()}"
                            >
-                            <span class="cuttedText">📄 ${item.getName()}</span>
+                            <span class="Text">📄 ${item.getName()}</span>
                             </button>
                             </form>
                     </c:if>
@@ -52,7 +52,7 @@
                             name="path"
                             value="${item.getAbsolutePath()}"
                             >
-                            <span class="cuttedText">📁 ${item.getName()}/</span>
+                            <span class="Text">📁 ${item.getName()}/</span>
                             </button>
                             </form>
                     </c:if>

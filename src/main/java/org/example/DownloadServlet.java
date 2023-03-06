@@ -29,10 +29,10 @@ public class DownloadServlet extends HttpServlet{
             String path = new String(bytes, StandardCharsets.UTF_8);
             System.out.println(path);
             String fileName = Paths.get(path).getFileName().toString();
-            resp.setContentType("application/x-msdownload");
+            resp.setContentType("text/plain");
             resp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (InputStream in = new FileInputStream(path); OutputStream out = resp.getOutputStream()) {
-                byte[] buffer = new byte[1048];
+                byte[] buffer = new byte[1000000000];
                 int numBytesRead;
                 while ((numBytesRead = in.read(buffer)) > 0) {
                     out.write(buffer, 0, numBytesRead);

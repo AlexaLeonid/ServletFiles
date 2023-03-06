@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -18,10 +19,13 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathParam = req.getParameter("path");
-        req.setAttribute("path", pathParam);
-     //   File file = new File("C:\\Users\\Sasacompik\\OneDrive\\Рабочий стол");
-     //   File folder = new File("C:\\Users\\Sasacompik\\OneDrive\\Рабочий стол\\");
 
+        if (pathParam == null) {
+            resp.sendRedirect("http://localhost:8000/ServletFiles/files?path=C:/Users/Sasacompik/OneDrive");
+            return;
+        }
+
+        req.setAttribute("path", pathParam);
         File file = new File(pathParam);
         String parentDirectory = file.getParent();
         req.setAttribute("parentDirectory", parentDirectory);
