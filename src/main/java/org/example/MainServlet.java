@@ -21,7 +21,8 @@ public class MainServlet extends HttpServlet {
         String pathParam = req.getParameter("path");
 
         if (pathParam == null) {
-            resp.sendRedirect("http://localhost:8000/ServletFiles/files?path=C:/Users/Sasacompik/OneDrive");
+            pathParam = System.getProperty("user.dir").replace('\\', '/');
+            resp.sendRedirect(String.format("%s?path=%s",req.getRequestURL(), pathParam));
             return;
         }
 
