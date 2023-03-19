@@ -13,6 +13,11 @@
       </style>
 </head>
 <body>
+    <form action="./deauthorization" method="post" >
+        <button type="submit" name="logOut" >
+        <span class="Text">Log out</span>
+        </button>
+    </form>
     <h4>${dateGeneration}</h4>
     <br>
     <form action="./files" method="get" >

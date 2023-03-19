@@ -1,4 +1,4 @@
-package org.example;
+package org.example.servlets;
 
 
 import javax.servlet.ServletException;
@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @WebServlet("/files/download")
 public class DownloadServlet extends HttpServlet{
@@ -29,7 +27,7 @@ public class DownloadServlet extends HttpServlet{
             String path = new String(bytes, StandardCharsets.UTF_8);
             System.out.println(path);
             String fileName = Paths.get(path).getFileName().toString();
-            resp.setContentType("text/plain");
+        //    resp.setContentType("text/plain");
             resp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (InputStream in = new FileInputStream(path); OutputStream out = resp.getOutputStream()) {
                 byte[] buffer = new byte[4096];
