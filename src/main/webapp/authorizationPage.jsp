@@ -15,5 +15,10 @@
            <span class="Text">Log in</span>
        </button>
     </form>
+    <form action="./registration" method="get" >
+           <button type="submit" name="commit" >
+               <span class="Text">Sign up</span>
+           </button>
+        </form>
    </body>
 </html>
