@@ -19,17 +19,19 @@ public class MainServlet extends HttpServlet {
         String pathParam = req.getParameter("path");
         HttpSession session = req.getSession();
         Object login = session.getAttribute("login").toString();
+        if (pathParam != null){
+            pathParam = (new File(pathParam)).getCanonicalPath();
+        }
 
-
-        if (pathParam == null || !pathParam.startsWith("C:\\students\\" + login.toString())) {
+        if (pathParam == null || !pathParam.startsWith(new File("C:\\students\\" + login.toString()).getCanonicalPath())) {
             pathParam = "C:\\students\\" + login.toString();
         }
 
         File file = new File(pathParam);
         String parentDirectory = file.getParent();
 
-        if (parentDirectory == null || !parentDirectory.startsWith("C:\\students\\" + login) ){
-            parentDirectory = "C:\\students\\" + login;
+        if (parentDirectory == null || !parentDirectory.startsWith("C:\\students\\" + login.toString()) ){
+            parentDirectory = "C:\\students\\" + login.toString();
             file = new File(parentDirectory);
         }
         if (file.isDirectory()) {
@@ -49,9 +51,7 @@ public class MainServlet extends HttpServlet {
             req.setAttribute("dateGeneration", dateFormat.format(date));
 
             req.getRequestDispatcher("mainPage.jsp").forward(req, resp);
-
         }
-
 }
 
     @Override

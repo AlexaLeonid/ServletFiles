@@ -27,7 +27,7 @@ public class DownloadServlet extends HttpServlet{
             String path = new String(bytes, StandardCharsets.UTF_8);
             System.out.println(path);
             String fileName = Paths.get(path).getFileName().toString();
-        //    resp.setContentType("text/plain");
+            resp.setContentType("application/octet-stream");
             resp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (InputStream in = new FileInputStream(path); OutputStream out = resp.getOutputStream()) {
                 byte[] buffer = new byte[4096];
