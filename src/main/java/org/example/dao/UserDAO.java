@@ -16,7 +16,7 @@ public class UserDAO implements DAO<UserProfile>{
        connection = UsersDB.getConnection();
     }
     @Override
-    public Optional<UserProfile> get(String login) {
+    public UserProfile getUser(String login) {
 
         if(connection != null){
             String sqlGet = "select * from users where login = ?";
@@ -24,9 +24,9 @@ public class UserDAO implements DAO<UserProfile>{
                 preparedStatement.setString(1, login);
                 try(ResultSet resultSet = preparedStatement.executeQuery()){
                     if(resultSet.next()){
-                        return Optional.ofNullable(new UserProfile(resultSet.getString("login"),
+                        return new UserProfile(resultSet.getString("login"),
                                                        resultSet.getString("password"),
-                                                       resultSet.getString("email")));
+                                                       resultSet.getString("email"));
                     }
                 }
 
@@ -34,7 +34,7 @@ public class UserDAO implements DAO<UserProfile>{
                 e.printStackTrace();
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
