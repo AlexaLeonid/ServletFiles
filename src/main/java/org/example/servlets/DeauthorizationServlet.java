@@ -13,6 +13,7 @@ public class DeauthorizationServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.getWriter().write("GET method isn't available");
+        doPost(req, resp);
     }
 
     @Override

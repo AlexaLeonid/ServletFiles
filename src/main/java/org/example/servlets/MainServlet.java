@@ -24,7 +24,7 @@ public class MainServlet extends HttpServlet {
         }
 
         if (pathParam == null || !pathParam.startsWith(new File("C:\\students\\" + login.toString()).getCanonicalPath())) {
-            pathParam = "C:\\students\\" + login.toString();
+            pathParam = "C:\\Students\\" + login.toString();
         }
 
         File file = new File(pathParam);
@@ -38,7 +38,7 @@ public class MainServlet extends HttpServlet {
 
             req.setAttribute("path", pathParam);
             req.setAttribute("parentDirectory", parentDirectory);
-            file.mkdir();
+
             File folder = new File(pathParam);
             File[] files = folder.listFiles();
 
@@ -59,20 +59,4 @@ public class MainServlet extends HttpServlet {
         resp.getWriter().write("POST method isn't available");
     }
 
-    public boolean isInDirectory(File homeFile, File childFile) throws IOException {
-        String homePath = homeFile.getAbsolutePath();
-        String childPath = childFile.getAbsolutePath();
-        return childPath.contains(homePath);
-      /*  homeFile = homeFile.;
-        childFile = childFile.getCanonicalFile();
-
-        File parentFile = childFile;
-        while(parentFile != null){
-            if(homeFile.equals(parentFile)){
-                return true;
-            }
-            parentFile = parentFile.getParentFile();
-        }
-        return false;*/
-    }
 }
