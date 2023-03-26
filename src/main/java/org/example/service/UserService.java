@@ -5,6 +5,7 @@ import org.example.models.UserProfile;
 import org.example.repository.UserRepository;
 
 import java.io.File;
+import java.util.Objects;
 
 public class UserService{
 
@@ -15,10 +16,10 @@ public class UserService{
     }
 
     public boolean addNewUser(String login, String password, String email){
-        if (login != null & login != "" & password != null & password != "" & email != null & email != "") {
+        if (login != null & !Objects.equals(login, "") & password != null & !Objects.equals(password, "") & email != null & !Objects.equals(email, "")) {
             UserProfile userProfile = getUserByLogin(login);
             if(userProfile != null){
-                if(userProfile.getPassword() == password){
+                if(Objects.equals(userProfile.getPassword(), password)){
                     return false;
                 }
             }

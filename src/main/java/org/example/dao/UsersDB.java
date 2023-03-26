@@ -7,8 +7,6 @@ public class UsersDB {
     public static final String DB_PASSWORD = "root";
     public static final String DB_URL = "jdbc:mysql://localhost:3306/usersdb";
     public static Connection connection = null;
-    public static Statement statement;
-
 
     public static Connection getConnection(){
         if (connection == null) {
