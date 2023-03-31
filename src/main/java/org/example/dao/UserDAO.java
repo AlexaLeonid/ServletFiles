@@ -1,14 +1,17 @@
 package org.example.dao;
 
+
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.example.models.UserProfile;
+import org.hibernate.PersistentObjectException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserDAO implements DAO<UserProfile>{
     Connection connection;
@@ -17,101 +20,86 @@ public class UserDAO implements DAO<UserProfile>{
     }
     @Override
     public UserProfile getUser(String login) {
+        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-        if(connection != null){
-            String sqlGet = "select * from users where login = ?";
-            try(PreparedStatement preparedStatement = connection.prepareStatement(sqlGet)){
-                preparedStatement.setString(1, login);
-                try(ResultSet resultSet = preparedStatement.executeQuery()){
-                    if(resultSet.next()){
-                        return new UserProfile(resultSet.getString("login"),
-                                                       resultSet.getString("password"),
-                                                       resultSet.getString("email"));
-                    }
-                }
+        UserProfile user = session.byNaturalId(UserProfile.class).using("login", login).load();
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-        return null;
+        transaction.commit();
+        session.close();
+
+        return user;
     }
 
     @Override
     public List<UserProfile> getAll() {
-        List<UserProfile> users = new ArrayList<>();
-        if(connection != null){
-            String sqlGet = "select * from users";
-            try(PreparedStatement preparedStatement = connection.prepareStatement(sqlGet)){
-                try(ResultSet resultSet = preparedStatement.executeQuery()){
-                    while(resultSet.next()){
-                        String loginU = resultSet.getString("login");
-                        String passwordU = resultSet.getString("password");
-                        String emailU = resultSet.getString("email");
-                        users.add(new UserProfile(loginU, passwordU, emailU));
-                    }
-                }
+        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-        return users;
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<UserProfile> cq = cb.createQuery(UserProfile.class);
+        Root<UserProfile> rootEntry = cq.from(UserProfile.class);
+        CriteriaQuery<UserProfile> all = cq.select(rootEntry);
+        TypedQuery<UserProfile> allQuery = session.createQuery(all);
+
+        transaction.commit();
+        session.close();
+
+        return allQuery.getResultList();
     }
 
     @Override
     public boolean save(UserProfile user) {
-        boolean saved = false;
-        if(connection != null){
-            String sqlGet = "insert into users (login, password, email) values (?, ?, ?)";
-            try(PreparedStatement preparedStatement = connection.prepareStatement(sqlGet)){
-                preparedStatement.setString(1, user.getLogin());
-                preparedStatement.setString(2, user.getPassword());
-                preparedStatement.setString(3, user.getEmail());
-                preparedStatement.executeUpdate();
-                saved = true;
+        boolean saved = true;
+        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
+        try{
+            session.persist(user);
+        }catch (PersistentObjectException e){
+            saved = false;
         }
+
+        transaction.commit();
+        session.close();
+
         return saved;
     }
 
     @Override
     public boolean update(UserProfile user) {
-        boolean updated = false;
-        if(connection != null){
-            String sqlGet = "UPDATE users SET login = ?, password = ?, email = ? WHERE login = ?";
-            try(PreparedStatement preparedStatement = connection.prepareStatement(sqlGet)){
-                preparedStatement.setString(1, user.getLogin());
-                preparedStatement.setString(2, user.getPassword());
-                preparedStatement.setString(3, user.getEmail());
-                preparedStatement.setString(4, user.getLogin());
-                preparedStatement.executeUpdate();
-                updated = true;
+        boolean updated = true;
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
+        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        try{
+            session.merge(user);
+        }catch (PersistentObjectException e){
+            updated = false;
         }
+
+        transaction.commit();
+        session.close();
+
         return updated;
     }
 
     @Override
     public boolean delete(UserProfile user) {
-        boolean deleted = false;
-        if(connection != null){
-            String sqlGet = "DELETE FROM users WHERE login = ?";
-            try(PreparedStatement preparedStatement = connection.prepareStatement(sqlGet)){
-                preparedStatement.setString(1, user.getLogin());
-                preparedStatement.executeUpdate();
-                deleted = true;
+        boolean deleted = true;
+        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
+        try{
+            session.remove(user);
+        }catch (PersistentObjectException e){
+            deleted = false;
         }
+
+        transaction.commit();
+        session.close();
+
         return deleted;
     }
 }

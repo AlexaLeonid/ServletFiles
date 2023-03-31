@@ -1,9 +1,21 @@
 package org.example.models;
 
-public class UserProfile {
+import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
+@Entity
+@Table(name = "users")
+public class UserProfile {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NaturalId
+    @Column(name = "login")
     private String login;
+    @Column(name = "password")
     private String password;
+    @Column(name = "email")
     private String email;
 
     public UserProfile(String login, String password, String email){
@@ -11,7 +23,10 @@ public class UserProfile {
         this.password = password;
         this.email = email;
     }
-
+    public UserProfile(){};
+    public Integer getId() {
+        return id;
+    }
     public String getLogin() {
         return login;
     }
