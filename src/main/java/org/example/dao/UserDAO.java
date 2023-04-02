@@ -20,7 +20,7 @@ public class UserDAO implements DAO<UserProfile>{
     }
     @Override
     public UserProfile getUser(String login) {
-        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Session session = Hibernate.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
         UserProfile user = session.byNaturalId(UserProfile.class).using("login", login).load();
@@ -33,7 +33,7 @@ public class UserDAO implements DAO<UserProfile>{
 
     @Override
     public List<UserProfile> getAll() {
-        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Session session = Hibernate.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -51,7 +51,7 @@ public class UserDAO implements DAO<UserProfile>{
     @Override
     public boolean save(UserProfile user) {
         boolean saved = true;
-        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Session session = Hibernate.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
         try{
@@ -70,7 +70,7 @@ public class UserDAO implements DAO<UserProfile>{
     public boolean update(UserProfile user) {
         boolean updated = true;
 
-        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Session session = Hibernate.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
         try{
@@ -88,7 +88,7 @@ public class UserDAO implements DAO<UserProfile>{
     @Override
     public boolean delete(UserProfile user) {
         boolean deleted = true;
-        Session session = Hibernate.getSessionFactory().getCurrentSession();
+        Session session = Hibernate.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
         try{
